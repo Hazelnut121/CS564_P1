@@ -253,7 +253,152 @@ int main(int argc, const char * argv[]) {
         cin.clear();
         getline(cin, command);
         cin.clear();
-        parsed = bstree.parse_command(command);
+      //  parsed = bstree.parse_command(command);
+	{
+		 int start, end, idx;
+    start = end = idx = 0;
+    string* res;
+    
+    while(end < command.size()){
+        end = command.find(' ', start);
+        // command starts with ' '
+        if(end == -1){
+            end = command.size();
+        }
+        if(end == start){
+            while(end < command.size() && command[end] == ' '){
+                end += 1;
+            }
+            // empty substr
+            if(end == command.size()){
+                if((res[0] == "load" and idx == 2) or (res[0] == "locate" and idx == 3) or res[0] == "new" or res[0] == "end"){
+			string* parsed = res;
+                     if(parsed == NULL){
+            cout << "ERROR: Invalid command" << endl;
+        }
+        else{
+            if(parsed[0] == "load"){
+                bstree.destroy(bstree.root);
+                bstree.root = NULL;
+                bstree.parse_file(parsed[1]);
+            }
+            else if(parsed[0] == "locate"){
+                int res = bstree.search(parsed[1], stoi(parsed[2]));
+                if(res != NULL){
+                    cout << res << endl;
+                }
+                else{
+                    cout << "No matching entry" << endl;
+                }
+            }
+            else if(parsed[0] == "new"){
+                bstree.destroy(bstree.root);
+                bstree.root = NULL;
+            }
+            else if(parsed[0] == "end"){
+                bstree.destroy(bstree.root);
+                bstree.root = NULL;
+                break;
+            }
+        }
+	delete[] parsed;
+    }
+                }
+                //return NULL;
+            }
+            start = end;
+            continue;
+        }
+        string substr = command.substr(start, end-start);
+        start = end+1;
+        // first part of command
+        if(idx == 0){
+            string lower_substr = lower(substr);
+            if(lower_substr == "load"){
+                res = new string[2];
+            }
+            else if(lower_substr == "locate"){
+                res = new string[3];
+            }
+            else if(lower_substr == "new"){
+                res = new string[1];
+            }
+            else if(lower_substr == "end"){
+                res = new string[1];
+            }
+            else{
+               // return NULL;
+            }
+            idx += 1;
+            res[0] = lower_substr;
+        }
+        else if(idx == 1){
+            if(res[0] == "load"){
+                res[1] = substr;
+            }
+            else if(res[0] == "locate"){
+                res[1] = lower(substr);
+            }
+            else{
+                return NULL;
+            }
+            idx += 1;
+        }
+        else if(idx == 2){
+            if(res[0] == "locate"){
+                if(isValidNum(substr)){
+                    res[2] = substr;
+                }
+                else{
+                 //   return NULL;
+                }
+            }
+            else{
+               // return NULL;
+            }
+            idx += 1;
+        }
+        else{
+           // return NULL;
+        }
+    }
+    
+    if((res[0] == "load" and idx == 2) or (res[0] == "locate" and idx == 3) or res[0] == "new" or res[0] == "end"){
+	string* parsed = res;
+         if(parsed == NULL){
+            cout << "ERROR: Invalid command" << endl;
+        }
+        else{
+            if(parsed[0] == "load"){
+                bstree.destroy(bstree.root);
+                bstree.root = NULL;
+                bstree.parse_file(parsed[1]);
+            }
+            else if(parsed[0] == "locate"){
+                int res = bstree.search(parsed[1], stoi(parsed[2]));
+                if(res != NULL){
+                    cout << res << endl;
+                }
+                else{
+                    cout << "No matching entry" << endl;
+                }
+            }
+            else if(parsed[0] == "new"){
+                bstree.destroy(bstree.root);
+                bstree.root = NULL;
+            }
+            else if(parsed[0] == "end"){
+                bstree.destroy(bstree.root);
+                bstree.root = NULL;
+                break;
+            }
+        }
+	delete[] parsed;
+    }
+    }
+    return NULL;
+	}
+/*
         if(parsed == NULL){
             cout << "ERROR: Invalid command" << endl;
         }
@@ -284,5 +429,6 @@ int main(int argc, const char * argv[]) {
         }
 	delete[] parsed;
     }
+*/
     return 0;
 }

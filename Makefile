@@ -1,7 +1,7 @@
 # Makefile
 # Requires that the object definitions be in wl.h and wl.cpp
 
-CXX = g++ 
+CXX = g++ -std=c++11 
 CXXFLAGS =  -O2 -g -Wall
 
 # During debugging you may want to used the compiler flags listed below
